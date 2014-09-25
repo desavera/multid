@@ -1,0 +1,22 @@
+include $(WAVEDIR)/make/defs
+
+CCFLAGS += -g
+CPPFLAGS = -I. $(MULTIDINC) $(GRAPHINC) $(GUIINC) $(WUTILINC)
+LDLIBS = $(MULTIDLIBS) $(GRAPHLIBS) $(GUILIBS) $(WUTILLIBS) $(SYSLIBS)
+CLEANSRC += $(PROGEXE)
+PRINTSRC += TODO
+TARSRC += TODO in*
+
+PROGLIB = $(GUILIB) $(GRAPHLIB) $(MULTIDLIB)
+PROGSRC = Display.cc main.cc
+PROGOBJ = $(PROGSRC:%.cc=$(OBJDIR)/%.o)
+PROGEXE = $(OBJDIR)/display
+DEPENDOBJ = $(PROGSRC:%.cc=$(OBJDIR)/%.d)
+
+$(PROGEXE): $(PROGLIB) $(PROGOBJ)
+	$(LINK.cc) -o $@ $(PROGOBJ) $(LDLIBS)
+
+include $(WAVEDIR)/make/rules
+ifneq ($(RPHOSTTYPE),mingw32)
+-include $(DEPENDOBJ)
+endif

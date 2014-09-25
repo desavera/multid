@@ -1,0 +1,20 @@
+include $(WAVEDIR)/make/defs
+
+CCFLAGS += -g
+CPPFLAGS = -I. $(MULTIDINC) $(GRAPHINC) $(GUIINC) $(WUTILINC)
+LDLIBS = $(MULTIDLIBS) $(GRAPHLIBS) $(GUILIBS) $(WUTILLIBS) $(SYSLIBS)
+CLEANSRC += $(PROGEXE)
+
+PROGLIB = $(GUILIB) $(GRAPHLIB) $(MULTIDLIB)
+PROGSRC = CharPlot.cc main.cc
+PROGOBJ = $(PROGSRC:%.cc=$(OBJDIR)/%.o)
+PROGEXE = $(OBJDIR)/charplot
+DEPENDOBJ = $(PROGSRC:%.cc=$(OBJDIR)/%.d)
+
+$(PROGEXE): $(PROGLIB) $(PROGOBJ)
+	$(LINK.cc) -o $@ $(PROGOBJ) $(LDLIBS)
+
+include $(WAVEDIR)/make/rules
+ifneq ($(RPHOSTTYPE),mingw32)
+-include $(DEPENDOBJ)
+endif

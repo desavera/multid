@@ -1,0 +1,25 @@
+include $(WAVEDIR)/make/defs
+
+MULTIDIR = ..
+
+DEBUGFLAG = -g
+
+CPPFLAGS = -I. $(MULTIDINC) $(GRAPHINC) $(GUIINC) $(WUTILINC)
+LDLIBS = $(MULTIDLIBS) $(GRAPHLIBS) $(GUILIBS) $(WUTILLIBS) $(SYSLIBS)
+CLEANSRC += $(PROGEXE)
+PRINTSRC += README BUGS
+TARSRC += README BUGS
+
+PROGLIB = $(GUILIB) $(GRAPHLIB) $(MULTIDLIB)
+PROGSRC = Euclid2.cc Euclid3.cc Mobius.cc MobiusControl.cc Maps.cc main.cc
+PROGOBJ = $(PROGSRC:%.cc=$(OBJDIR)/%.o)
+PROGEXE = $(OBJDIR)/t
+DEPENDOBJ = $(PROGSRC:%.cc=$(OBJDIR)/%.d)
+
+$(PROGEXE): $(PROGLIB) $(PROGOBJ)
+	$(LINK.cc) -o $@ $(PROGOBJ) $(LDLIBS)
+
+include $(WAVEDIR)/make/rules
+ifneq ($(RPHOSTTYPE),mingw32)
+-include $(DEPENDOBJ)
+endif
